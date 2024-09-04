@@ -19,6 +19,8 @@ const storySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+storySchema.index({ createdAt: -1 });
+
 const Story = mongoose.model('Story', storySchema);
 
 module.exports = {

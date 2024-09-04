@@ -5,10 +5,12 @@ const jobSchema = new mongoose.Schema(
     jobTitle: {
       type: String,
       required: true,
+      lowercase: true,
     },
     company: {
       type: String,
       required: true,
+      lowercase: true,
     },
     location: {
       type: String,
@@ -17,6 +19,7 @@ const jobSchema = new mongoose.Schema(
     jobType: {
       type: String,
       required: true,
+      lowercase: true,
     },
     description: {
       type: String,
@@ -39,6 +42,8 @@ const jobSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+jobSchema.index({ createdAt: -1 });
 
 const Job = mongoose.model('Job', jobSchema);
 

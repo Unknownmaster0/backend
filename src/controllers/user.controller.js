@@ -6,6 +6,9 @@ const { capitalise } = require('../utils/capitalise.utils');
 const { userExist } = require('../utils/userExist');
 
 const registerUser = asyncHandler(async (req, res) => {
+  // console.log(`req body in signup`);
+  // console.log(req.body);
+
   const {
     collegeName,
     programme,
@@ -100,6 +103,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+
   const { email, password } = req.body;
   const crntUser = await userExist(email);
 
@@ -121,9 +125,7 @@ const loginUser = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, `User loged in`, { token }));
 });
 
-const updateUser = asyncHandler(async (req, res) => {
-  
-});
+const updateUser = asyncHandler(async (req, res) => {});
 
 module.exports = {
   registerUser,

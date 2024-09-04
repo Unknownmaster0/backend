@@ -14,7 +14,7 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    contaceEmai: {
+    contactEmail: {
       type: String,
       required: true,
     },
@@ -44,7 +44,7 @@ const eventSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      linkedinId: {
+      socialMediaLink: {
         type: String,
         required: true,
       },
@@ -52,6 +52,8 @@ const eventSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+eventSchema.index({ createdAt: -1 });
 
 const Event = mongoose.model('Event', eventSchema);
 

@@ -6,23 +6,12 @@ const app = express();
 
 // cors policy
 // cors preflight
-app.options(
-  '*',
-  cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
-    credentials: true,
-  })
-);
-
-// Use CORS middleware
 app.use(
   cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
-    credentials: true,
+    origin: 'http://localhost:5173', // Frontend origin
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    credentials: true, // Allow cookies and credentials
   })
 );
 
@@ -38,10 +27,16 @@ app.use(express.static('public')); // to store some favicon, pdf, locally on my 
 app.use(cookiesParser());
 
 // import routes
-const { router: userRouter } = require('./routes/user.route');
+const { router: userRouter, router } = require('./routes/user.route');
+const { router: jobRouter } = require('./routes/job.route');
+const { router: eventRouter } = require('./routes/event.route');
+const { router: storyRouter } = require('./routes/story.route');
 
 // declare routes
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/user/job', jobRouter);
+app.use('/api/v1/user/event', eventRouter);
+app.use('/api/v1/user/story', storyRouter);
 
 module.exports = {
   app,
