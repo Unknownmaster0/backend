@@ -45,7 +45,7 @@ const createEvent = asyncHandler(async (req, res) => {
     presenterLink,
   } = req.body;
 
-  // checking if
+  // checking if empty, then say that it is required field.
   if (
     [
       time,
@@ -90,8 +90,29 @@ const createEvent = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, 'Event has been created!', event));
 });
 
+const showEventBasedOnId = asyncHandler(async(req, res) => {
+  const id = req.params.id;
+  try {
+    const event = await Event.findOne({ _id: id });
+    if (!event) {
+      // not able to find such event in db.
+      return res
+        .status(400)
+        .json(new ApiResponse(400, 'no such event available', ''));
+    }
+
+    return res.status(200).json(new ApiResponse(200, 'event found', event));
+  } catch (err) {
+    console.error(`error while fetching data from db: ${err}`);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, 'Internal server issue', ''));
+  }
+})
+
 module.exports = {
   showAllEvents,
   showUserCreatedEvent,
   createEvent,
+  showEventBasedOnId,
 };

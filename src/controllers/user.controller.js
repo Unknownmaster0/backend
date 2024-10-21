@@ -1,13 +1,14 @@
+const crypto = require('crypto');
 const { asyncHandler } = require('../utils/asyncHandler');
-const { ApiError } = require('../utils/ApiError');
 const { ApiResponse } = require('../utils/ApiResponse');
 const { User } = require('../models/user.models');
 const { capitalise } = require('../utils/capitalise.utils');
 const { userExist } = require('../utils/userExist');
+const { getUserIdByToken } = require('../utils/getUserId');
+const { sendEmailOtp } = require('../utils/email.otp');
 
 const registerUser = asyncHandler(async (req, res) => {
-  // console.log(`req body in signup`);
-  // console.log(req.body);
+  console.log(req.body);
 
   const {
     collegeName,
@@ -54,10 +55,6 @@ const registerUser = asyncHandler(async (req, res) => {
           ' '
         )
       );
-    // throw new ApiError(
-    //   409,
-    //   'User already exist with this mail or enrollment number.'
-    // );
   }
 
   // now in this case we will store the user in db, and return the some data to user.
@@ -103,7 +100,6 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-
   const { email, password } = req.body;
   const crntUser = await userExist(email);
 
@@ -125,9 +121,129 @@ const loginUser = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, `User loged in`, { token }));
 });
 
-const updateUser = asyncHandler(async (req, res) => {});
+const updateUser = asyncHandler(async (req, res) => {
+  console.log(`req.body in updateuser`);
+  console.log(req.body);
+
+  const {
+    fullName,
+    collegeName,
+    yearOfPassing,
+    enrollmentNumber,
+    phone,
+    email,
+    programme,
+    branch,
+    cgpa,
+    companyName,
+    currentJobTitle,
+    experience,
+    linkedinProfile,
+    skills,
+    hobbies,
+  } = req.body;
+
+  const userId = await getUserIdByToken(req.headers.authorization);
+
+  try {
+    const updatedUser = await User.updateOne(
+      { _id: userId },
+      {
+        fullName,
+        collegeName,
+        yearOfPassing,
+        enrollmentNumber,
+        phone,
+        email,
+        programme,
+        branch,
+        cgpa,
+        companyName,
+        currentJobTitle,
+        experience,
+        linkedinProfile,
+        skills,
+        hobbies,
+      }
+    );
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, 'Updated the user', updatedUser));
+  } catch (err) {
+    console.log(`error while updating the user: ${err}`);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, 'internal server error', ''));
+  }
+});
+
+const showAllUsers = asyncHandler(async (req, res) => {
+  // getting all the users with these fields in it.
+  const user = await User.find().select(
+    `fullName email yearOfPassing currentJobTitle _id`
+  );
+  return res.status(200).json(new ApiResponse(200, 'success', user));
+});
+
+// Function to send OTP to user
+const sendOtp = asyncHandler(async (req, res) => {
+  console.log(`I have reached in the sendOtp section`);
+
+  const { email } = req.body;
+
+  // Generate OTP
+  const otp = crypto.randomInt(100000, 999999).toString();
+
+  try {
+    // Retrieve user by token
+    const userId = await getUserIdByToken(req.headers.authorization);
+    const userObj = await User.findOne({ _id: userId });
+    if (!userObj) {
+      return res.status(404).json(new ApiResponse(404, 'User not found', ''));
+    }
+
+    // Store OTP in user object
+    userObj.otp = otp;
+    await userObj.save();
+
+    // Send OTP email
+    await sendEmailOtp(email, otp);
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, 'OTP sent successfully', otp));
+  } catch (err) {
+    console.error('Failed while sending the OTP:', err);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, 'Internal server error', ''));
+  }
+});
+
+const viewProfile = asyncHandler(async (req, res) => {});
+
+const showById = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findOne({ _id: userId });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, 'User send successfully', user));
+  } catch (err) {
+    console.log(`error while fetching data from user in user controller`);
+    res.status(500).json(new ApiResponse(500, 'Internal server issue', ''));
+  }
+});
 
 module.exports = {
   registerUser,
   loginUser,
+  updateUser,
+  showAllUsers,
+  sendOtp,
+  showById,
+  viewProfile,
 };

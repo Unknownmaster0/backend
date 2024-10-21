@@ -11,7 +11,19 @@ const storySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
+    author: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+    content: {
       type: String,
       required: true,
     },

@@ -4,6 +4,7 @@ const {
   showAllEvents,
   showUserCreatedEvent,
   createEvent,
+  showEventBasedOnId,
 } = require('../controllers/event.controller');
 const { authenticateUser } = require('../middlewares/user.middlware');
 
@@ -17,6 +18,8 @@ router
 
 // route to create event by the user.
 router.route('/createEvent').post(authenticateUser, createEvent);
+
+router.route('/:id').get(showEventBasedOnId);
 
 module.exports = {
   router,

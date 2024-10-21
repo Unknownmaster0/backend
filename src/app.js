@@ -27,7 +27,7 @@ app.use(express.static('public')); // to store some favicon, pdf, locally on my 
 app.use(cookiesParser());
 
 // import routes
-const { router: userRouter, router } = require('./routes/user.route');
+const { router: userRouter } = require('./routes/user.route');
 const { router: jobRouter } = require('./routes/job.route');
 const { router: eventRouter } = require('./routes/event.route');
 const { router: storyRouter } = require('./routes/story.route');

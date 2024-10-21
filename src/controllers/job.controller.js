@@ -81,10 +81,7 @@ const userJob = asyncHandler(async (req, res) => {
   // get the id of the user.
   const userId = await getUserIdByToken(req.headers.authorization);
 
-  const allJobsOfUser = await Job.find({ userCreated: userId }, (err) => {
-    console.log(`error while contacting to db`);
-    console.error(err);
-  });
+  const allJobsOfUser = await Job.find({ userCreated: userId });
 
   return res
     .status(200)

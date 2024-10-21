@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const { Job } = require('./job.models');
-const { Story } = require('./story.models');
-const { Event } = require('./event.models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -44,27 +41,39 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    createdJob: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: Job,
-      },
-    ],
-    createdStory: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: Story,
-      },
-    ],
-    createdEvent: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: Event,
-      },
-    ],
     password: {
       type: String,
       required: true,
+    },
+    branch: {
+      type: String,
+    },
+    cgpa: {
+      type: String,
+    },
+    companyName: {
+      type: String,
+    },
+    currentJobTitle: {
+      type: String,
+    },
+    experience: {
+      type: String,
+    },
+    linkedinProfile: {
+      type: String,
+    },
+    skills: {
+      type: String,
+    },
+    hobbies: {
+      type: String,
+    },
+    otp: {
+      type: String,
+    },
+    avatar: {
+      type: String,
     },
   },
   { timestamps: true }

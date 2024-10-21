@@ -9,17 +9,3 @@ module.exports = {
   asyncHandler,
 };
 
-// const asyncHandler = (requestFn) => {
-//   async (req, res, next) => {
-//     try {
-//       return await requestFn(req, res, next);
-//     } catch (err) {
-//       res.status(err.code || 404).json({
-//         success: false,
-//         msg: err.message,
-//       });
-//     }
-//   };
-// };
-
-// const a = (fn) => {() => {} }; // running the parametric fn inside arrow fn.

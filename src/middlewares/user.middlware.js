@@ -5,8 +5,6 @@ const { ApiResponse } = require('../utils/ApiResponse');
 
 const authenticateUser = function (req, res, next) {
   const token = req.headers.authorization;
-  // console.log(`token:`);
-  // console.log(token);
   //   if token is empty means the user is not logged in, then not to do anything, send to login page to the user.
   if (!token) {
     return res
