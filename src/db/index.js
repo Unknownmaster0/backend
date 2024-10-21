@@ -1,30 +1,19 @@
+const mongoose = require('mongoose');
 
-{
-    "firstName": "Sagar",
-    "lastName": "Singh",
-    "password": "Sagarsingh12@",
-    "username": "0sagar_singh01"
-}
-{
-    "firstName": "chintu",
-    "lastName": "Singh",
-    "password": "chintuSingh12@",
-    "username": "0chintu_singh01"
-5275.538699298087
-}
-
-{
-    "firstName": "abc",
-    "lastName": "def",
-    "password": "Abcdef12@",
-    "username": "abc_def01"
+async function connectDb() {
+  try {
+    const connectionObj = await mongoose.connect(
+      `${process.env.MONGODB_URL}/${process.env.DB_NAME}`
+    );
+    // console.log(`connection obj of database`);
+    // console.log(connectionObj);
+    // console.log(`database is connected: ${connectionObj.connection.host}`);
+  } catch (err) {
+    console.error('error while connection with database: ', err);
+    throw err;
+  }
 }
 
-{
-    "firstName": "don",
-    "lastName": "Singh",
-    "password": "donSingh12@",
-1450.872809726178
-    "username": "0don_singh01"
-	jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjBkb25fc2luZ2gwMSIsImlkIjoiNjZmNTkzZmQ1OGM2NDFkZjdlMDg1N2I2IiwiaWF0IjoxNzI3MzcwMzM5fQ.Su74OXHtgSgyLyl2YyhUd0818JYp9pQSn1VrRNHmY80
-}
+module.exports = {
+  connectDb,
+};
